@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HarmonyKloud App - Testing Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 40px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            color: #059669;
+            border-bottom: 4px solid #059669;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+
+        h2 {
+            color: #047857;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-left: 5px solid #059669;
+            padding-left: 15px;
+        }
+
+        h3 {
+            color: #065f46;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+
+        h4 {
+            color: #047857;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .section {
+            margin-bottom: 30px;
+            page-break-inside: avoid;
+        }
+
+        .step {
+            background: #f0fdf4;
+            border-left: 4px solid #059669;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #059669;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .expected {
+            background: #dbeafe;
+            border-left: 4px solid #3b82f6;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .expected strong {
+            color: #1e40af;
+        }
+
+        .note {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .warning {
+            background: #fee2e2;
+            border-left: 4px solid #ef4444;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin: 0 5px;
+        }
+
+        .badge-clinical {
+            background: #e0e7ff;
+            color: #3730a3;
+        }
+
+        .badge-general {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .badge-billable {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        code {
+            background: #f3f4f6;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #dc2626;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .feature-card {
+            background: #f9fafb;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #e5e7eb;
+        }
+
+        .feature-card h4 {
+            margin-top: 0;
+            color: #059669;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        th {
+            background: #f3f4f6;
+            font-weight: bold;
+            color: #047857;
+        }
+
+        .toc {
+            background: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .toc h2 {
+            margin-top: 0;
+        }
+
+        .toc ul {
+            list-style: none;
+            margin-left: 0;
+        }
+
+        .toc a {
+            color: #059669;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            text-decoration: underline;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .container {
+                box-shadow: none;
+                padding: 20px;
+            }
+
+            h2 {
+                page-break-after: avoid;
+            }
+
+            .step, .expected, .note {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 HarmonyKloud Mobile App</h1>
+        <h1 style="font-size: 1.8em; border: none; padding: 0; margin-bottom: 40px;">Complete Testing Guide</h1>
+
+        <div class="toc">
+            <h2>📑 Table of Contents</h2>
+            <ul>
+                <li><a href="#getting-started">1. Getting Started</a></li>
+                <li><a href="#appointment-module">2. Appointment Module Testing</a></li>
+                <li><a href="#clinical-module">3. Clinical Module Testing</a></li>
+                <li><a href="#common-issues">4. Common Issues & Troubleshooting</a></li>
+            </ul>
+        </div>
+
+        <div id="getting-started" class="section">
+            <h2>1. Getting Started</h2>
+
+            <h3>Login to the App</h3>
+            <div class="step">
+                <span class="step-number">1</span>
+                Open the HarmonyKloud app on your device
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Enter your email address in the <strong>"Email Address"</strong> field
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Enter your password in the <strong>"Password"</strong> field
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                Tap the <strong>"Sign In"</strong> button (green button at bottom)
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> You should be redirected to the Home screen with a drawer menu on the left side.
+            </div>
+
+            <div class="note">
+                <strong>📝 Note:</strong> If you see an error message, verify your credentials are correct or contact your administrator.
+            </div>
+        </div>
+
+        <div id="appointment-module" class="section">
+            <h2>2. Appointment Module Testing</h2>
+
+            <p>The appointment module allows you to create, view, and manage both <span class="badge badge-general">General</span> and <span class="badge badge-clinical">Clinical</span> appointments.</p>
+
+            <h3>2.1 Accessing the Appointment Screen</h3>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                From the Home screen, open the <strong>drawer menu</strong> (tap the hamburger icon ☰ at top-left)
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Tap on <strong>"Appointment"</strong> in the menu
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> You should see:
+                <ul>
+                    <li>A calendar at the top</li>
+                    <li>Three filter tabs: <code>All</code>, <code>Clinical</code>, <code>General</code></li>
+                    <li>A green <strong>"+ Create"</strong> button at top-right</li>
+                    <li>List of appointments for the selected date below</li>
+                </ul>
+            </div>
+
+            <h3>2.2 Viewing Appointments</h3>
+
+            <h4>Filter by Appointment Type</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                Tap the <strong>"All"</strong> tab (should be selected by default with white background)
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> All appointments (both Clinical and General) are displayed
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Tap the <strong>"Clinical"</strong> tab
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Only appointments with <span class="badge badge-clinical">Clinical</span> badge are shown
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Tap the <strong>"General"</strong> tab
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Only appointments with <span class="badge badge-general">General</span> badge are shown
+            </div>
+
+            <h4>View Appointment Details</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                Tap on any appointment card in the list
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Navigate to the Appointment Details screen showing:
+                <ul>
+                    <li>Time and duration</li>
+                    <li>Client name(s)</li>
+                    <li>Provider name</li>
+                    <li>Service information (for clinical)</li>
+                    <li>Location and zoom link</li>
+                    <li>Status badges (Clinical/General, Billable, Series, etc.)</li>
+                </ul>
+            </div>
+
+            <h3>2.3 Creating a General Appointment</h3>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                From the Appointment screen, tap the green <strong>"+ Create"</strong> button
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Navigate to Create Appointment screen with two tabs at top: <code>General</code> and <code>Clinical</code>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Ensure the <strong>"General"</strong> tab is selected (white background, green text)
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Fill in the <strong>Basic Information</strong> section:
+                <ul>
+                    <li><strong>Staff Member*:</strong> Tap dropdown and select a staff member</li>
+                    <li><strong>Date*:</strong> Tap the date field and select a date from calendar</li>
+                    <li><strong>Start Time*:</strong> Tap and select start time</li>
+                    <li><strong>End Time*:</strong> Tap and select end time</li>
+                    <li><strong>Timezone*:</strong> Should auto-fill (can change if needed)</li>
+                </ul>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong>
+                <ul>
+                    <li>Duration is automatically calculated and shown in green box</li>
+                    <li>You can now access the Service Details section below</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                Scroll down to <strong>Service Details</strong> section:
+                <ul>
+                    <li><strong>Appointment With:</strong> Tap to select one or multiple clients (optional)</li>
+                    <li><strong>Appointment Type*:</strong> Select <code>Single</code> or <code>Repeating</code></li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <strong>📝 Note:</strong> For General appointments, you can:
+                <ul>
+                    <li>Leave clients empty (no clients)</li>
+                    <li>Select one client</li>
+                    <li>Select multiple clients - they appear as green badges with X to remove</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                Scroll down to <strong>Location & Additional Information</strong>:
+                <ul>
+                    <li><strong>Location*:</strong> Select from dropdown</li>
+                    <li><strong>Zoom Link:</strong> Optional - enter if virtual</li>
+                    <li><strong>Appointment Name*:</strong> Auto-fills based on clients and time</li>
+                </ul>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Appointment Name shows:
+                <ul>
+                    <li>No clients: "General Appointment - (9:15 AM-10:15 AM)"</li>
+                    <li>One client: "John Doe - (9:15 AM-10:15 AM)"</li>
+                    <li>Two clients: "John Doe & Jane Smith - (9:15 AM-10:15 AM)"</li>
+                    <li>Three+ clients: "John Doe & 2 others - (9:15 AM-10:15 AM)"</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">6</span>
+                Tap the green <strong>"Create Appointment"</strong> button at the bottom
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong>
+                <ul>
+                    <li>Success message appears</li>
+                    <li>Navigate back to Appointment screen</li>
+                    <li>New appointment appears in the list with <span class="badge badge-general">General</span> badge</li>
+                </ul>
+            </div>
+
+            <h3>2.4 Creating a Clinical Appointment</h3>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                From the Appointment screen, tap <strong>"+ Create"</strong>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Tap the <strong>"Clinical"</strong> tab at the top
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Tab switches to Clinical (white background, green text)
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Fill in <strong>Basic Information</strong> (same as General):
+                <ul>
+                    <li>Staff Member*</li>
+                    <li>Date*</li>
+                    <li>Start Time*</li>
+                    <li>End Time*</li>
+                    <li>Timezone*</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                In <strong>Service Details</strong> section (Clinical-specific):
+                <ul>
+                    <li><strong>Client*:</strong> Select ONE client (required for clinical)</li>
+                    <li><strong>Billing Type*:</strong> Select <code>Billable</code> or <code>Non-Billable</code></li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <strong>📝 Note:</strong> Once you select a client, additional fields appear based on Billing Type.
+            </div>
+
+            <h4>If Billable is Selected:</h4>
+
+            <div class="step">
+                <span class="step-number">5a</span>
+                After selecting <strong>Billable</strong>:
+                <ul>
+                    <li><strong>Authorization*:</strong> Select an authorization for the client</li>
+                    <li><strong>Billable Service*:</strong> Select service from the authorization</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ Warning:</strong> If no authorizations exist for the selected client, you'll see a red warning. You must add authorizations first or switch to Non-Billable.
+            </div>
+
+            <h4>If Non-Billable is Selected:</h4>
+
+            <div class="step">
+                <span class="step-number">5b</span>
+                After selecting <strong>Non-Billable</strong>:
+                <ul>
+                    <li><strong>Non-Billable Service*:</strong> Select from company services list</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">6</span>
+                Select <strong>Appointment Type</strong>:
+                <ul>
+                    <li><code>Single</code> - One-time appointment</li>
+                    <li><code>Repeating</code> - Recurring appointment series</li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <strong>📝 Note:</strong> If you select Repeating, a new "Recurrence Settings" section appears where you configure frequency, count, and days.
+            </div>
+
+            <div class="step">
+                <span class="step-number">7</span>
+                Fill <strong>Location & Additional Information</strong> (same as General)
+            </div>
+
+            <div class="step">
+                <span class="step-number">8</span>
+                Tap <strong>"Create Appointment"</strong>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong>
+                <ul>
+                    <li>Appointment created successfully</li>
+                    <li>Appears with <span class="badge badge-clinical">Clinical</span> badge</li>
+                    <li>Shows <span class="badge badge-billable">Billable</span> or "Non-Billable" badge</li>
+                </ul>
+            </div>
+
+            <h3>2.5 Advanced Features</h3>
+
+            <h4>Creating Repeating Appointments</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                When creating any appointment, select <strong>Repeating</strong> for Appointment Type
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Scroll to the new <strong>Recurrence Settings</strong> section
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Configure:
+                <ul>
+                    <li><strong>Frequency*:</strong> Daily, Weekly, Monthly, or Yearly</li>
+                    <li><strong>Interval:</strong> Repeat every X days/weeks/months</li>
+                    <li><strong>Count*:</strong> Number of occurrences</li>
+                    <li><strong>Days of Week:</strong> Select which days (for weekly frequency)</li>
+                </ul>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Creates a series of appointments based on recurrence settings. Each shows "Series" badge.
+            </div>
+
+            <h4>Adding Time Splits</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                In the <strong>Time Splits</strong> section, tap <strong>"+ Add Time Split"</strong>
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                In the modal:
+                <ul>
+                    <li>Select Start Time and End Time</li>
+                    <li>Select Code/Service for this time split</li>
+                    <li>Tap <strong>"Add Time Split"</strong></li>
+                </ul>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Time split appears in list. You can add multiple splits that don't exceed the total appointment duration.
+            </div>
+
+            <h4>Editing an Appointment</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                Tap on an appointment in the list to view details
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Look for an <strong>Edit</strong> button or icon
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Make your changes (note: scheduled type tabs are disabled in edit mode)
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                Tap <strong>"Save"</strong> or <strong>"Update"</strong>
+            </div>
+
+            <div class="note">
+                <strong>📝 Note:</strong> You cannot change the appointment type (General ↔ Clinical) when editing.
+            </div>
+        </div>
+
+        <div id="clinical-module" class="section">
+            <h2>3. Clinical Module Testing</h2>
+
+            <p>The Clinical module includes session notes, targets, skills, and behavioral tracking features.</p>
+
+            <h3>3.1 Accessing Clinical Features</h3>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                Open the drawer menu (☰) from Home screen
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Tap on <strong>"Clinical"</strong>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Navigate to Clinical dashboard showing overview of sessions, targets, and skills
+            </div>
+
+            <h3>3.2 Session Notes</h3>
+
+            <h4>Viewing Session List</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                From Clinical screen, tap <strong>"Session List"</strong> or <strong>"Sessions"</strong>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> List of all sessions showing:
+                <ul>
+                    <li>Client name</li>
+                    <li>Date and time</li>
+                    <li>Session status (Draft, Completed, etc.)</li>
+                    <li>Service code</li>
+                </ul>
+            </div>
+
+            <h4>Creating a Session Note</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                Tap <strong>"+ New Session"</strong> or similar button
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Select:
+                <ul>
+                    <li><strong>Client:</strong> Choose from dropdown</li>
+                    <li><strong>Service:</strong> Select service code</li>
+                    <li><strong>Date & Time:</strong> When session occurred</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Fill in session details:
+                <ul>
+                    <li>Objectives covered</li>
+                    <li>Interventions used</li>
+                    <li>Client response</li>
+                    <li>Progress notes</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                Tap <strong>"Save Draft"</strong> or <strong>"Complete Session"</strong>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Session saved and appears in session list
+            </div>
+
+            <h4>Viewing Session Details</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                From Session List, tap on any session card
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Navigate to Session Detail screen showing:
+                <ul>
+                    <li>Full session information</li>
+                    <li>Targets worked on</li>
+                    <li>Data collected</li>
+                    <li>Notes and observations</li>
+                    <li>Edit button (if session is editable)</li>
+                </ul>
+            </div>
+
+            <h3>3.3 Targets & Goals</h3>
+
+            <h4>Viewing Targets</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                From Clinical screen, tap <strong>"Targets"</strong>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> List of behavioral targets showing:
+                <ul>
+                    <li>Target name/description</li>
+                    <li>Client name</li>
+                    <li>Current status (Active, Mastered, etc.)</li>
+                    <li>Progress indicators</li>
+                </ul>
+            </div>
+
+            <h4>Creating a New Target</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                Tap <strong>"+ Add Target"</strong> or similar button
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Fill in target information:
+                <ul>
+                    <li><strong>Target Name:</strong> Short description</li>
+                    <li><strong>Client:</strong> Select client</li>
+                    <li><strong>Domain:</strong> Area of development</li>
+                    <li><strong>Baseline:</strong> Current performance level</li>
+                    <li><strong>Goal Criteria:</strong> What constitutes mastery</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Configure data collection:
+                <ul>
+                    <li>Measurement type (frequency, duration, percentage)</li>
+                    <li>Collection method</li>
+                    <li>Trial settings</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                Tap <strong>"Save Target"</strong>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Target created and appears in targets list
+            </div>
+
+            <h4>Recording Data on a Target</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                From Targets list, tap on a target
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Look for <strong>"Start Trial"</strong> or <strong>"Collect Data"</strong> button
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                Record responses:
+                <ul>
+                    <li>Tap <code>+</code> for correct response</li>
+                    <li>Tap <code>-</code> for incorrect response</li>
+                    <li>Or use percentage/duration based on measurement type</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                Tap <strong>"Save"</strong> when done
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Data recorded and graphs/charts update to show progress
+            </div>
+
+            <h3>3.4 Skills Assessment</h3>
+
+            <h4>Viewing Skills</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                From drawer menu, look for <strong>"Skills"</strong> or access via Clinical dashboard
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> List of skill domains (Communication, Social, Daily Living, etc.)
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Tap on a skill domain
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Shows sub-skills within that domain with assessment status
+            </div>
+
+            <h4>Conducting Skills Assessment</h4>
+
+            <div class="step">
+                <span class="step-number">1</span>
+                Select a client for assessment
+            </div>
+
+            <div class="step">
+                <span class="step-number">2</span>
+                Navigate through skill domains
+            </div>
+
+            <div class="step">
+                <span class="step-number">3</span>
+                For each skill, rate the client's ability:
+                <ul>
+                    <li>Not demonstrated</li>
+                    <li>Emerging</li>
+                    <li>Acquired</li>
+                    <li>Mastered</li>
+                </ul>
+            </div>
+
+            <div class="step">
+                <span class="step-number">4</span>
+                Add notes if needed
+            </div>
+
+            <div class="step">
+                <span class="step-number">5</span>
+                Tap <strong>"Save Assessment"</strong>
+            </div>
+
+            <div class="expected">
+                <strong>✓ Expected Result:</strong> Assessment saved and progress charts update
+            </div>
+        </div>
+
+        <div id="common-issues" class="section">
+            <h2>4. Common Issues & Troubleshooting</h2>
+
+            <h3>4.1 Appointment Issues</h3>
+
+            <div class="feature-card">
+                <h4>Issue: Can't select clients</h4>
+                <p><strong>Solution:</strong> Make sure you've selected a Staff Member first. Client selection is disabled until a staff member is chosen.</p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Issue: No authorizations available</h4>
+                <p><strong>Solution:</strong> The selected client doesn't have active authorizations. Either:
+                <ul>
+                    <li>Add authorizations for the client first</li>
+                    <li>Switch to Non-Billable appointment</li>
+                    <li>Select a different client</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Issue: Can't create appointment</h4>
+                <p><strong>Solution:</strong> Check that all required fields (*) are filled:
+                <ul>
+                    <li>Staff Member</li>
+                    <li>Date</li>
+                    <li>Start/End Time</li>
+                    <li>Location</li>
+                    <li>For Clinical: Client, Service</li>
+                    <li>For Billable: Authorization</li>
+                </ul>
+                </p>
+            </div>
+
+            <div class="feature-card">
+                <h4>Issue: Appointment name not auto-filling</h4>
+                <p><strong>Solution:</strong> Make sure you've filled:
+                <ul>
+                    <li>Start Time</li>
+                    <li>End Time</li>
+                    <li>(Optional) Client(s) for better naming</li>
+                </ul>
+                The name should update automatically as you fill these fields.
+                </p>
+            </div>
+
+            <h3>4.2 General Issues</h3>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Issue</th>
+                        <th>Possible Cause</th>
+                        <th>Solution</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>App crashes on startup</td>
+                        <td>Corrupted cache or data</td>
+                        <td>Clear app cache/data and restart</td>
+                    </tr>
+                    <tr>
+                        <td>Can't see appointments</td>
+                        <td>Wrong date selected or filter active</td>
+                        <td>Check calendar date and ensure "All" tab is selected</td>
+                    </tr>
+                    <tr>
+                        <td>Changes not saving</td>
+                        <td>Network connection issue</td>
+                        <td>Check internet connection and try again</td>
+                    </tr>
+                    <tr>
+                        <td>Loading forever</td>
+                        <td>Server timeout or slow connection</td>
+                        <td>Pull down to refresh or restart app</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>4.3 What to Test For</h3>
+
+            <div class="note">
+                <strong>📋 Checklist for comprehensive testing:</strong>
+
+                <h4>Appointments:</h4>
+                <ul>
+                    <li>✓ Create General appointment with no clients</li>
+                    <li>✓ Create General appointment with one client</li>
+                    <li>✓ Create General appointment with multiple clients</li>
+                    <li>✓ Create Clinical billable appointment</li>
+                    <li>✓ Create Clinical non-billable appointment</li>
+                    <li>✓ Create repeating appointment</li>
+                    <li>✓ Filter appointments by type</li>
+                    <li>✓ View appointment details</li>
+                    <li>✓ Edit existing appointment</li>
+                    <li>✓ Add time splits to appointment</li>
+                </ul>
+
+                <h4>Clinical:</h4>
+                <ul>
+                    <li>✓ Create new session note</li>
+                    <li>✓ View session list</li>
+                    <li>✓ Edit session in draft status</li>
+                    <li>✓ Complete a session</li>
+                    <li>✓ Create new target</li>
+                    <li>✓ Record data on target</li>
+                    <li>✓ View target progress graphs</li>
+                    <li>✓ Conduct skills assessment</li>
+                    <li>✓ View skills progress report</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>5. Support & Feedback</h2>
+
+            <div class="note">
+                <strong>Need Help?</strong>
+                <p>If you encounter any issues not covered in this guide:</p>
+                <ul>
+                    <li>Take screenshots of the issue</li>
+                    <li>Note what you were trying to do</li>
+                    <li>Report the issue to your team lead or administrator</li>
+                </ul>
+            </div>
+
+            <div class="expected">
+                <strong>Provide Feedback:</strong>
+                <p>Your feedback helps improve the app! Please share:</p>
+                <ul>
+                    <li>Features that work well</li>
+                    <li>Features that are confusing</li>
+                    <li>Suggestions for improvements</li>
+                    <li>Bugs or unexpected behavior</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr style="margin: 40px 0; border: none; border-top: 2px solid #e5e7eb;">
+
+        <div style="text-align: center; color: #6b7280; font-size: 0.9em;">
+            <p><strong>HarmonyKloud Mobile App v1.0</strong></p>
+            <p>Testing Guide - Generated: December 2025</p>
+            <p style="margin-top: 20px;">For internal testing purposes only</p>
+        </div>
+    </div>
+</body>
+</html>
